@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>AttackNotes</title>
-<link rel="icon" href="icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttackNotes - BIG EDITION</title>
 
 <style>
 html, body {
@@ -11,11 +11,13 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
   background: radial-gradient(circle at center, #2a0f1f 0%, #120812 100%);
   color: white;
+  overflow: hidden;
 }
 
+/* 画面全体のコンテナ */
 .screen {
   width: 100%;
   height: 100%;
@@ -23,17 +25,20 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  padding: 40px 20px;
 }
 
 .screen.active {
   display: flex;
 }
 
+/* ロゴ：icon.pngを使用し、サイズを大きく設定 */
 .logo {
-  width: 110px;
-  height: 110px;
-  margin-bottom: 20px;
-  filter: drop-shadow(0 0 18px rgba(255, 80, 80, 0.6));
+  width: 160px;
+  height: 160px;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 25px rgba(255, 80, 80, 0.7));
   animation: float 3s ease-in-out infinite;
 }
 
@@ -43,139 +48,171 @@ html, body {
   object-fit: contain;
 }
 
+/* タイトルを巨大に */
 h1 {
-  font-size: 3.5rem;
-  margin-bottom: 10px;
+  font-size: clamp(3.5rem, 12vw, 5.5rem);
+  margin: 0 0 15px 0;
+  font-weight: 900;
+  letter-spacing: -2px;
   background: linear-gradient(to right, #fff, #ff9aa9);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-
 .description {
   color: #9ca3af;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   text-align: center;
+  font-size: 1.4rem;
+  font-weight: 300;
 }
 
+/* ボタン：一回り大きく */
 button {
-  padding: 14px 30px;
-  border-radius: 12px;
+  padding: 20px 45px;
+  border-radius: 18px;
   border: none;
-  font-size: 1rem;
+  font-size: 1.4rem;
   font-weight: bold;
   cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
 }
 
-.btn-main {
-  background: linear-gradient(135deg, #ff5c8a, #ff3b3b);
-  color: white;
+button:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
 }
 
-.btn-sub {
-  background: rgba(255,255,255,0.15);
-  color: white;
+button:active {
+  transform: translateY(1px);
 }
 
-.btn-danger {
-  background: #ef4444;
-  color: white;
-}
+.btn-main { background: linear-gradient(135deg, #ff5c8a, #ff3b3b); color: white; }
+.btn-sub { background: rgba(255,255,255,0.15); color: white; }
+.btn-danger { background: #ef4444; color: white; }
 
+/* テキストエリア：巨大化 */
 textarea {
-  width: 85%;
-  height: 65%;
-  border-radius: 20px;
-  border: none;
-  padding: 25px;
-  font-size: 1.2rem;
+  width: 100%;
+  max-width: 1000px;
+  height: 65vh;
+  border-radius: 30px;
+  border: 2px solid rgba(255,255,255,0.1);
+  padding: 35px;
+  font-size: 1.8rem;
+  line-height: 1.6;
   resize: none;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.08);
   color: white;
   outline: none;
+  box-sizing: border-box;
+  margin-bottom: 30px;
 }
 
-.button-row {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
+/* リスト画面のスタイル */
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.memo-list-container {
+  width: 100%;
+  max-width: 1000px;
+  height: 60vh;
+  overflow-y: auto;
+  margin-bottom: 30px;
 }
 
 .memo-list {
-  width: 80%;
-  max-width: 900px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
 .memo-item {
-  background: rgba(255,255,255,0.08);
-  padding: 20px;
-  border-radius: 14px;
+  background: rgba(255,255,255,0.1);
+  padding: 30px;
+  border-radius: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.memo-item small {
-  color: #9ca3af;
+.memo-item strong {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
 }
 
-.memo-actions {
+.memo-item small { 
+  color: #9ca3af; 
+  font-size: 1rem; 
+}
+
+.button-row {
   display: flex;
-  gap: 10px;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 @keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05); }
 }
 
+@media (max-width: 600px) {
+  .memo-item {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  button {
+    width: 100%;
+    padding: 25px;
+  }
+  .button-row {
+    width: 100%;
+    flex-direction: column;
+  }
+  .logo {
+    width: 120px;
+    height: 120px;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<!-- ホーム -->
 <div id="home" class="screen active">
   <div class="logo">
     <img src="icon.png" alt="AttackNotes Icon">
   </div>
-
   <h1>AttackNotes</h1>
-  <p class="description">
-    思考を殴って、新しい想像を！
-  </p>
-
+  <p class="description">思考を殴って、新しい想像を！</p>
   <div class="button-row">
     <button class="btn-main" onclick="openEditor()">✍ 新しく書く</button>
     <button class="btn-sub" onclick="openList()">💾 保存済み</button>
   </div>
 </div>
 
-<!-- エディタ -->
 <div id="editor" class="screen">
   <textarea id="memoArea" placeholder="ここに書き殴る…"></textarea>
   <div class="button-row">
-    <button class="btn-main" onclick="saveMemo()">❤️ 保存</button>
+    <button class="btn-main" onclick="saveMemo()">❤️ 保存する</button>
     <button class="btn-sub" onclick="backHome()">戻る</button>
   </div>
 </div>
 
-<!-- 保存一覧 -->
 <div id="list" class="screen">
-  <h2>💾 保存済みノート</h2>
-  <div id="memoList" class="memo-list"></div>
-
+  <h2>💾 保存済み</h2>
+  <div class="memo-list-container">
+    <div id="memoList" class="memo-list"></div>
+  </div>
   <div class="button-row">
     <button class="btn-sub" onclick="backHome()">🏠 ホームに戻る</button>
   </div>
@@ -188,6 +225,8 @@ const list = document.getElementById("list");
 const memoArea = document.getElementById("memoArea");
 const memoList = document.getElementById("memoList");
 
+let editingId = null;
+
 function switchScreen(screen) {
   [home, editor, list].forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
@@ -195,26 +234,26 @@ function switchScreen(screen) {
 
 function backHome() {
   memoArea.value = "";
+  editingId = null;
   switchScreen(home);
 }
 
-function openEditor(text = "") {
+function openEditor(text = "", id = null) {
   memoArea.value = text;
+  editingId = id;
   switchScreen(editor);
-  memoArea.focus();
+  setTimeout(() => memoArea.focus(), 100);
 }
 
 function saveMemo() {
-  if (!memoArea.value.trim()) return;
-
-  const memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
-
-  memos.push({
-    id: Date.now(),
-    text: memoArea.value,
-    date: new Date().toLocaleDateString()
-  });
-
+  const text = memoArea.value.trim();
+  if (!text) return;
+  let memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
+  if (editingId) {
+    memos = memos.map(m => m.id === editingId ? { ...m, text: text, date: new Date().toLocaleDateString() } : m);
+  } else {
+    memos.push({ id: Date.now(), text: text, date: new Date().toLocaleDateString() });
+  }
   localStorage.setItem("attackMemos", JSON.stringify(memos));
   backHome();
 }
@@ -222,38 +261,44 @@ function saveMemo() {
 function openList() {
   memoList.innerHTML = "";
   const memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
-
+  if (memos.length === 0) {
+    memoList.innerHTML = "<p style='text-align:center; font-size:1.5rem; opacity:0.5;'>まだ何もありません</p>";
+  }
   memos.slice().reverse().forEach(memo => {
     const div = document.createElement("div");
     div.className = "memo-item";
-
+    const title = memo.text.split("\n")[0].slice(0, 20) || "無題の殴り書き";
     div.innerHTML = `
-      <div>
-        <strong>${memo.text.split("\n")[0].slice(0,30)}</strong><br>
+      <div style="flex:1;">
+        <strong>${escapeHtml(title)}</strong>
         <small>${memo.date}</small>
       </div>
-      <div class="memo-actions">
-        <button class="btn-sub" onclick="openEditor(\`${memo.text.replace(/`/g,"\\`")}\`)">開く</button>
+      <div class="memo-actions" style="display:flex; gap:15px;">
+        <button class="btn-sub" onclick="editMemo(${memo.id})">開く</button>
         <button class="btn-danger" onclick="destroySaved(${memo.id})">破壊</button>
       </div>
     `;
-
     memoList.appendChild(div);
   });
-
   switchScreen(list);
 }
 
+function editMemo(id) {
+  const memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
+  const memo = memos.find(m => m.id === id);
+  if (memo) openEditor(memo.text, memo.id);
+}
+
 function destroySaved(id) {
-  const ok = confirm("このノートを完全に破壊しますか？\nこの操作は取り消せません。");
-
-  if (!ok) return;
-
+  if (!confirm("本当に破壊していいですか？")) return;
   let memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
   memos = memos.filter(m => m.id !== id);
-
   localStorage.setItem("attackMemos", JSON.stringify(memos));
   openList();
+}
+
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
 </script>
 
