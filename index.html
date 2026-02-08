@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <link rel="icon" href="icon.png">
-<title>AttackNotes</title>
-<meta name="description" content="溢れ出すアイデアを殴り書きするためのwebサービス">
+<title>AttackNotes - BIG EDITION</title>
 
 <style>
+/* 1. 基本レイアウトと背景設定 */
 html, body {
   margin: 0;
   padding: 0;
@@ -19,7 +18,7 @@ html, body {
   overflow: hidden;
 }
 
-/* 画面全体のコンテナ */
+/* 2. 画面切り替え用のコンテナ設定 */
 .screen {
   width: 100%;
   height: 100%;
@@ -35,7 +34,7 @@ html, body {
   display: flex;
 }
 
-/* ロゴ：icon.pngを使用し、サイズを大きく設定 */
+/* 3. ロゴのフローティングアニメーション */
 .logo {
   width: 160px;
   height: 160px;
@@ -50,7 +49,7 @@ html, body {
   object-fit: contain;
 }
 
-/* タイトルを巨大に */
+/* 4. 巨大なグラデーションタイトル */
 h1 {
   font-size: clamp(3.5rem, 12vw, 5.5rem);
   margin: 0 0 15px 0;
@@ -70,7 +69,7 @@ h1 {
   font-weight: 300;
 }
 
-/* ボタン：一回り大きく */
+/* 5. ボタンの共通スタイル */
 button {
   padding: 20px 45px;
   border-radius: 18px;
@@ -96,7 +95,28 @@ button:active {
 .btn-sub { background: rgba(255,255,255,0.15); color: white; }
 .btn-danger { background: #ef4444; color: white; }
 
-/* テキストエリア：巨大化 */
+/* 追加リンクのスタイル */
+.link-footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.link-footer a {
+  color: #ff9aa9;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, border-bottom 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.link-footer a:hover {
+  opacity: 1;
+  border-bottom: 1px solid #ff9aa9;
+}
+
+/* 6. 巨大なテキストエリア */
 textarea {
   width: 100%;
   max-width: 1000px;
@@ -114,7 +134,7 @@ textarea {
   margin-bottom: 30px;
 }
 
-/* リスト画面のスタイル */
+/* 7. 保存済みメモリストのスタイル */
 h2 {
   font-size: 2.5rem;
   margin-bottom: 30px;
@@ -166,6 +186,7 @@ h2 {
   50% { transform: translateY(-15px) scale(1.05); }
 }
 
+/* 8. モバイル向け調整 */
 @media (max-width: 600px) {
   .memo-item {
     flex-direction: column;
@@ -196,9 +217,16 @@ h2 {
   </div>
   <h1>AttackNotes</h1>
   <p class="description">思考を殴って、新しい想像を！</p>
+  
   <div class="button-row">
     <button class="btn-main" onclick="openEditor()">✍ 新しく書く</button>
     <button class="btn-sub" onclick="openList()">💾 保存済み</button>
+  </div>
+
+  <div class="link-footer">
+    <a href="https://shun240523-stack.github.io/Flowcuit/" target="_blank" rel="noopener noreferrer">
+      🔗 Flowcuit 
+    </a>
   </div>
 </div>
 
@@ -221,6 +249,7 @@ h2 {
 </div>
 
 <script>
+// DOM要素の取得
 const home = document.getElementById("home");
 const editor = document.getElementById("editor");
 const list = document.getElementById("list");
@@ -229,17 +258,20 @@ const memoList = document.getElementById("memoList");
 
 let editingId = null;
 
+// 画面切り替え関数
 function switchScreen(screen) {
   [home, editor, list].forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
 }
 
+// ホームへ戻る処理
 function backHome() {
   memoArea.value = "";
   editingId = null;
   switchScreen(home);
 }
 
+// エディターを開く
 function openEditor(text = "", id = null) {
   memoArea.value = text;
   editingId = id;
@@ -247,9 +279,11 @@ function openEditor(text = "", id = null) {
   setTimeout(() => memoArea.focus(), 100);
 }
 
+// メモを保存する（LocalStorage使用）
 function saveMemo() {
   const text = memoArea.value.trim();
   if (!text) return;
+
   let memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
   if (editingId) {
     memos = memos.map(m => m.id === editingId ? { ...m, text: text, date: new Date().toLocaleDateString() } : m);
@@ -260,12 +294,15 @@ function saveMemo() {
   backHome();
 }
 
+// 保存済みリストを表示
 function openList() {
   memoList.innerHTML = "";
   const memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
+  
   if (memos.length === 0) {
     memoList.innerHTML = "<p style='text-align:center; font-size:1.5rem; opacity:0.5;'>まだ何もありません</p>";
   }
+
   memos.slice().reverse().forEach(memo => {
     const div = document.createElement("div");
     div.className = "memo-item";
@@ -285,12 +322,14 @@ function openList() {
   switchScreen(list);
 }
 
+// メモ編集
 function editMemo(id) {
   const memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
   const memo = memos.find(m => m.id === id);
   if (memo) openEditor(memo.text, memo.id);
 }
 
+// メモ削除（破壊）
 function destroySaved(id) {
   if (!confirm("本当に破壊していいですか？")) return;
   let memos = JSON.parse(localStorage.getItem("attackMemos") || "[]");
@@ -299,13 +338,12 @@ function destroySaved(id) {
   openList();
 }
 
+// XSS対策用エスケープ関数
 function escapeHtml(str) {
+  if (!str) return "";
   return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
-
-//ai生成コード
-
 </script>
+
 </body>
 </html>
-
